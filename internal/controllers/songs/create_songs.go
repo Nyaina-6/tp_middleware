@@ -38,9 +38,4 @@ func AddSong(w http.ResponseWriter, r *http.Request) {
     }
     w.WriteHeader(http.StatusOK)
     
-    
-
-    /*w.WriteHeader(http.StatusCreated)
-    responseBody ,  _ := json.Marshal(createdsong)
-    _, _ = w.Write(responseBodyesponse)*/ // Ignorer l'erreur de Write car elle ne devrait pas se produire après la vérification de Marshal
 }

@@ -15,14 +15,15 @@ func DeleteSong(w http.ResponseWriter, r *http.Request) {
     err := songs.DeleteSong(songID)
     if err != nil {
         logrus.Errorf("Error deleting song: %s", err.Error())
-        if customError, isCustom := err.(*models.CustomError); isCustom {
-            w.WriteHeader(customError.Code)
-            body, _ := json.Marshal(customError)
-            _, _ = w.Write(body)
-        } else {
-            w.WriteHeader(http.StatusInternalServerError)
-        }
-        return
+        customError, isCustom := err.(*models.CustomError)
+		if isCustom {
+			w.WriteHeader(customError.Code)
+			body, _ := json.Marshal(customError)
+			_, _ = w.Write(body)
+		} else {
+			w.WriteHeader(http.StatusInternalServerError)
+		}
+		return
     }
 
     w.WriteHeader(http.StatusNoContent)
