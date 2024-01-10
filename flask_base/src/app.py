@@ -13,9 +13,11 @@ from src.routes.songs import songs as songs_route
 app = config_app()
 
 # register routes
-app.register_blueprint(auth_route, url_prefix="/")
+#app.register_blueprint(auth_route, url_prefix="/")
 app.register_blueprint(users_route, url_prefix="/users")
 app.register_blueprint(songs_route, url_prefix="/songs")
+app.register_blueprint(auth_route, url_prefix="/login")
+
 
 
 # allows to generate Swagger doc for all documented functions

@@ -7,15 +7,13 @@ class Song(db.Model):
     artist = db.Column(db.String(255))
     album = db.Column(db.String(255))
     title = db.Column(db.String(255))
-    realease_year = db.Column(db.Integer)
     genre = db.Column(db.String(100))
 
-    def __init__(self, song_id, artist, album, title, realease_year, genre):
+    def __init__(self, song_id, artist, album, title, genre):
         self.id = song_id
         self.artist = artist
         self.album = album
         self.title = title
-        self.release_year = realease_year
         self.genre = genre
 
     def is_empty(self):
@@ -23,5 +21,4 @@ class Song(db.Model):
                (not self.artist or self.artist == "") and \
                (not self.album or self.album == "") and \
                (not self.title or self.title == "") and \
-               (not self.realease_year or self.realease_year == 0) and \
                (not self.genre or self.genre == "")

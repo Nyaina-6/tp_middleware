@@ -31,3 +31,20 @@ class UserUpdateSchema(BaseUserSchema):
                 ("username" in data and data["username"] != "") or
                 ("password" in data and data["password"] != "")):
             raise ValidationError("at least one of ['name','username','password'] must be specified")
+
+class UserCreateSchema(UserUpdateSchema):
+    # Champs supplémentaires pour la création d'un utilisateur
+    name = fields.String(required=True)
+    username = fields.String(required=True)
+    password = fields.String(required=True)
+    #email = fields.Email(required=True)
+
+
+    # Validation pour s'assurer qu'au moins un champ est spécifié
+    @validates_schema
+    def validate_field(self, data, **kwargs):
+        fields_to_check = ['name','username', 'password']  
+        for field in fields_to_check:
+            if field in data and data[field]:
+                return  
+        raise ValidationError("All of ['name','username', 'password'] must be specified")

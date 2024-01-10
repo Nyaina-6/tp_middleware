@@ -8,7 +8,7 @@ def get_song(song_id):
 def get_all_songs():
     return db.session.query(Song).all()
 
-def create_song(song):
+def add_song(song):
     db.session.add(song)
     db.session.commit()
 
@@ -20,7 +20,6 @@ def update_song(song):
     existing_song.artist = song.artist
     existing_song.album = song.album
     existing_song.title = song.title
-    existing_song.realease_year = song.realease_year
     existing_song.genre = song.genre
     db.session.commit()
 

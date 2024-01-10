@@ -10,7 +10,7 @@ from src.models.http_exceptions import *
 import src.repositories.users as users_repository
 
 
-users_url = "http://localhost:4000/users/"  # URL de l'API users (golang)
+users_url = "http://localhost:8086/users/"  # URL de l'API users (golang)
 
 
 def get_user(id):
@@ -47,7 +47,7 @@ def modify_user(id, user_update):
 
     # s'il y a quelque chose à changer côté API (username, name)
     user_schema = UserSchema().loads(json.dumps(user_update), unknown=EXCLUDE)
-    response = None
+    #response = requests.request(method="PUT", url=users_url + id, json=user_schema)
     if not UserSchema.is_empty(user_schema):
         # on lance la requête de modification
         response = requests.request(method="PUT", url=users_url+id, json=user_schema)
@@ -79,3 +79,28 @@ def get_user_from_db(username):
 
 def user_exists(username):
     return get_user_from_db(username) is not None
+
+def get_all_users():
+    response = requests.request(method ="GET" , url=users_url)
+    return response.json(), response.status_code
+
+def create_user(user_data):
+    user_schema = UserSchema().loads(json.dumps(user_data), unknown=EXCLUDE)
+    response = requests.request(method = "POST", url=users_url, json=user_schema)
+    if response.status_code != 201:  
+            return {"message": "User created successfully"}, 201
+    try: 
+        user_model = UserModel.from_dict(user_data)  
+        users_repository.add_user(user_model) 
+    except Exception :
+        return {"message": "Failed to create user"}, response.status_code
+
+    
+def delete_user(id):
+    response = requests.request(method="DELETE", url=users_url+id)
+    if response.status_code == 200:
+        return {"message": "User deleted successfully"}, 200
+    else:
+        return {"message": "Failed to delete user"}, response.status_code
+    
+    

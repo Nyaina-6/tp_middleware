@@ -42,7 +42,6 @@ func init() {
 		artist VARCHAR(255) NOT NULL,
 			album VARCHAR(255) ,
 			title VARCHAR(255) NOT NULL,
-			realease_year VARCHAR(255) NOT NULL , 
 			genre VARCHAR(255) NOT NULL
 
 

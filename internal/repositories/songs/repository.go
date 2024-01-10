@@ -22,7 +22,7 @@ func GetAllSongs() ([]models.Song, error) {
 	songs := []models.Song{}
 	for rows.Next() {
 		var data models.Song
-		err = rows.Scan(&data.Id, &data.Artist,&data.Album,&data.Title,&data.Realease_year,&data.Genre)
+		err = rows.Scan(&data.Id, &data.Artist,&data.Album,&data.Title,&data.Genre)
 		if err != nil {
 			return nil, err
 		}
@@ -43,7 +43,7 @@ func GetSongById(id uuid.UUID) (*models.Song, error) {
 	helpers.CloseDB(db)
 
 	var song models.Song
-	err = row.Scan(&song.Id, &song.Artist, &song.Album, &song.Title, &song.Realease_year, &song.Genre)
+	err = row.Scan(&song.Id, &song.Artist, &song.Album, &song.Title, &song.Genre)
 	if err != nil {
 		return nil, err
 	}
@@ -62,8 +62,8 @@ func CreateSong(song models.Song) (error) {
 		return err
 	}
 
-	_, err = db.Exec("INSERT INTO songs (id, artist, album, title, realease_year, genre) VALUES (?, ?, ?, ?, ?, ?)",
-    newUUID.String() , song.Artist, song.Album, song.Title, song.Realease_year, song.Genre)
+	_, err = db.Exec("INSERT INTO songs (id, artist, album, title, genre) VALUES (?, ?, ?, ?, ?)",
+    newUUID.String() , song.Artist, song.Album, song.Title, song.Genre)
 	helpers.CloseDB(db) 
     if err != nil {
         return err
@@ -77,8 +77,8 @@ func UpdateSong(id uuid.UUID ,song models.Song) (models.Song, error) {
         return models.Song{}, err
     }
 
-    _, err = db.Exec("UPDATE songs SET artist = ?, album = ?, title = ?, release_year = ?, genre = ? WHERE id = ?",
-        song.Artist, song.Album, song.Title, song.Realease_year, song.Genre, id.String())
+    _, err = db.Exec("UPDATE songs SET artist = ?, album = ?, title = ?, genre = ? WHERE id = ?",
+        song.Artist, song.Album, song.Title, song.Genre, id.String())
 	helpers.CloseDB(db)
 
     if err != nil {

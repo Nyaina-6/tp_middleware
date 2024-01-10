@@ -10,7 +10,7 @@ import src.services.users as users_service
 import src.services.auth as auth_service
 
 
-auth = Blueprint(name="login", import_name=__name__)
+auth = Blueprint(name="/login", import_name=__name__)
 
 
 @auth.route('/login', methods=['POST'])
@@ -179,7 +179,7 @@ def register():
 
 
 @auth.route('/introspect', methods=["GET"])
-@login_required
+#@login_required
 def introspect():
     """
     ---

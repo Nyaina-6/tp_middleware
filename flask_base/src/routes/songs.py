@@ -1,5 +1,5 @@
 import json
-from flask import Blueprint, request
+from flask import Blueprint, jsonify, request
 from flask_login import login_required
 from marshmallow import ValidationError
 
@@ -112,7 +112,7 @@ def put_song(id):
 
     try:
         return songs_service.modify_song(id, song_update)
-    except Exception as e:
+    except Exception :
         # Gérer d'autres exceptions en fonction de votre logique
         error = SomethingWentWrongSchema().loads("{}")
         return error, error.get("code")
@@ -196,8 +196,63 @@ def create_song():
         error = UnprocessableEntitySchema().loads(json.dumps({"message": e.messages.__str__()}))
         return error, error.get("code")
     try:
-        return songs_service.create_song(new_song_data), 201
+        result, status_code = songs_service.create_song(new_song_data)
+        return jsonify(result), status_code
+ 
     except Exception as e:
         # Gérer d'autres exceptions en fonction de votre logique
         error = SomethingWentWrongSchema().loads("{}")
+        
         return error, error.get("code")
+    
+      
+    
+@songs.route('/<id>', methods=['DELETE'])
+#@login_required
+def delete_song(id):
+    """
+    ---
+    delete:
+      description: Deleting a song
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: uuidv4
+          required: true
+          description: UUID of song id to be deleted
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema: Song
+            application/yaml:
+              schema: Song
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema: Unauthorized
+            application/yaml:
+              schema: Unauthorized
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema: NotFound
+            application/yaml:
+              schema: NotFound
+      tags:
+          - songs
+    """
+    try:
+        return songs_service.delete_song(id)
+    except NotFound:
+        error = NotFoundSchema().loads(json.dumps({"message": "Song not found"}))
+        return error, 404
+    except Exception as e:
+        # Handle other exceptions based on your application's logic
+        error = SomethingWentWrongSchema().loads("{}")
+        return error, error.get("code")
+

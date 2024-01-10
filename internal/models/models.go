@@ -9,7 +9,6 @@ type Song struct {
 	Artist string     `json:"artist"`
 	Album string     `json:"album"`
 	Title string     `json:"title"`
-	Realease_year string     `json:"realease_year"`
 	Genre string     `json:"genre"`
 	
 }
