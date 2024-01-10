@@ -8,6 +8,8 @@ from src.schemas.user import UserSchema
 from src.models.user import User as UserModel
 from src.models.http_exceptions import *
 import src.repositories.users as users_repository
+from werkzeug.security import generate_password_hash
+
 
 
 users_url = "http://localhost:8086/users/"  # URL de l'API users (golang)
@@ -86,6 +88,7 @@ def get_all_users():
 
 def create_user(user_data):
     user_schema = UserSchema().loads(json.dumps(user_data), unknown=EXCLUDE)
+   
     response = requests.request(method = "POST", url=users_url, json=user_schema)
     if response.status_code != 201:  
             return {"message": "User created successfully"}, 201

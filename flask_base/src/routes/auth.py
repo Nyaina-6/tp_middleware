@@ -10,7 +10,7 @@ import src.services.users as users_service
 import src.services.auth as auth_service
 
 
-auth = Blueprint(name="/login", import_name=__name__)
+auth = Blueprint(name="login", import_name=__name__)
 
 
 @auth.route('/login', methods=['POST'])
@@ -65,14 +65,14 @@ def login():
         return error, error.get("code")
 
     # logger l'utilisateur
-    try:
-        user = auth_service.login(user_login)
-    except (NotFound, Unauthorized):
-        error = UnauthorizedSchema().loads("{}")
-        return error, error.get("code")
-    except Exception:
-        error = SomethingWentWrongSchema().loads("{}")
-        return error, error.get("code")
+    
+    user = auth_service.login(user_login)
+   # except (NotFound, Unauthorized):
+       # "error = UnauthorizedSchema().loads("{}")
+       # return error, error.get("code")
+  #  except Exception:
+        #error = SomethingWentWrongSchema().loads("{}")
+       # return error, error.get("code")
 
     login_user(user, remember=True)
     return "", 200
