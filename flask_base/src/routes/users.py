@@ -16,7 +16,7 @@ users = Blueprint(name="users", import_name=__name__)
 
 
 @users.route('/<id>', methods=['GET'])
-#@login_required
+@login_required
 def get_user(id):
     """
     ---
@@ -58,7 +58,7 @@ def get_user(id):
 
 
 @users.route('/<id>', methods=['PUT'])
-#@login_required
+@login_required
 def put_user(id):
     """
     ---
@@ -132,7 +132,7 @@ def put_user(id):
         return error, error.get("code")
     
 @users.route('/', methods=['GET'])
-#@login_required
+@login_required
 def get_all_users():
     """
     ---
@@ -160,7 +160,7 @@ def get_all_users():
     return jsonify(users), 200
 
 @users.route('', methods=['POST'])
-#@login_required  # Assurez-vous que cette fonctionnalité est correctement gérée dans votre application
+@login_required  
 def create_user():
     """
     ---
@@ -170,7 +170,7 @@ def create_user():
         required: true
         content:
             application/json:
-                schema: UserInsertSchema  # Assurez-vous d'avoir un schéma pour l'insertion d'utilisateurs
+                schema: UserInsertSchema 
             application/yaml:
                 schema: UserInsertSchema
       responses:
@@ -206,7 +206,7 @@ def create_user():
     
 
 @users.route('/<id>', methods=['DELETE'])
-#@login_required
+@login_required
 def delete_user(id):
     """
     ---

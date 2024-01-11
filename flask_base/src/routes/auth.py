@@ -65,14 +65,14 @@ def login():
         return error, error.get("code")
 
     # logger l'utilisateur
-    
-    user = auth_service.login(user_login)
-   # except (NotFound, Unauthorized):
-       # "error = UnauthorizedSchema().loads("{}")
-       # return error, error.get("code")
-  #  except Exception:
-        #error = SomethingWentWrongSchema().loads("{}")
-       # return error, error.get("code")
+    try:
+        user = auth_service.login(user_login)
+    except (NotFound, Unauthorized):
+        error = UnauthorizedSchema().loads("{}")
+        return error, error.get("code")
+    except Exception:
+        error = SomethingWentWrongSchema().loads("{}")
+        return error, error.get("code")
 
     login_user(user, remember=True)
     return "", 200
@@ -174,12 +174,12 @@ def register():
         error = ConflictSchema().loads(json.dumps({"message": "User already exists"}))
         return error, error.get("code")
     except SomethingWentWrong:
-        error = SomethingWentWrongSchema().loads("{}")
+        error = UnprocessableEntitySchema().loads("{}")
         return error, error.get("code")
 
 
 @auth.route('/introspect', methods=["GET"])
-#@login_required
+@login_required
 def introspect():
     """
     ---

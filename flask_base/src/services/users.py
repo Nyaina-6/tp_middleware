@@ -8,7 +8,7 @@ from src.schemas.user import UserSchema
 from src.models.user import User as UserModel
 from src.models.http_exceptions import *
 import src.repositories.users as users_repository
-from werkzeug.security import generate_password_hash
+
 
 
 
@@ -18,7 +18,6 @@ users_url = "http://localhost:8086/users/"  # URL de l'API users (golang)
 def get_user(id):
     response = requests.request(method="GET", url=users_url+id)
     return response.json(), response.status_code
-
 
 def create_user(user_register):
     # on récupère le modèle utilisateur pour la BDD
@@ -93,7 +92,7 @@ def create_user(user_data):
     if response.status_code != 201:  
             return {"message": "User created successfully"}, 201
     try: 
-        user_model = UserModel.from_dict(user_data)  
+        user_model = UserModel.from_dict_with_clear_password(user_data)  
         users_repository.add_user(user_model) 
     except Exception :
         return {"message": "Failed to create user"}, response.status_code
@@ -101,9 +100,10 @@ def create_user(user_data):
     
 def delete_user(id):
     response = requests.request(method="DELETE", url=users_url+id)
-    if response.status_code == 200:
-        return {"message": "User deleted successfully"}, 200
-    else:
-        return {"message": "Failed to delete user"}, response.status_code
+    try:
+       return {"message": "Song deleted successfully"}, 200
+    except Exception:
+        return {"message": "Failed to delete the song to database"}, 500
+
     
     

@@ -55,13 +55,9 @@ def modify_song(id, song_update):
 def delete_song(id):
     response = requests.request(method="DELETE", url=songs_url + id)
     
-    if response.status_code != 200:
-        return response.json(), response.status_code
+    try:
+        return {"message": "Song deleted successfully"}, 200
+    except Exception:
+        return {"message": "Failed to delete the song to database"}, 500
 
-    #try:
-    #    songs_repository.delete_song(id)
-    #    return {"message": "Song deleted successfully"}, 200
-    #except Exception:
-    #    return {"message": "Failed to delete the song to database"}, 500
-
-    
+  

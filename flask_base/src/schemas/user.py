@@ -7,13 +7,19 @@ class UserSchema(Schema):
     inscription_date = fields.DateTime(description="Inscription date")
     name = fields.String(description="Name")
     username = fields.String(description="Username")
+    password = fields.String(description="Password")
+    email = fields.Email(description="Email")
     
     @staticmethod
     def is_empty(obj):
         return (not obj.get("id") or obj.get("id") == "") and \
                (not obj.get("name") or obj.get("name") == "") and \
                (not obj.get("username") or obj.get("username") == "") and \
-               (not obj.get("inscription_date") or obj.get("inscription_date") == "")
+               (not obj.get("inscription_date") or obj.get("inscription_date") == "")\
+                (not obj.get("password") or obj.get("password") == "") and \
+               (not obj.get("email") or obj.get("email") == "")
+
+
 
 
 class BaseUserSchema(Schema):
@@ -37,14 +43,14 @@ class UserCreateSchema(UserUpdateSchema):
     name = fields.String(required=True)
     username = fields.String(required=True)
     password = fields.String(required=True)
-    #email = fields.Email(required=True)
+    email = fields.Email(required=True)
 
 
     # Validation pour s'assurer qu'au moins un champ est spécifié
     @validates_schema
     def validate_field(self, data, **kwargs):
-        fields_to_check = ['name','username', 'password']  
+        fields_to_check = ['name','username', 'password' , 'email']  
         for field in fields_to_check:
             if field in data and data[field]:
                 return  
-        raise ValidationError("All of ['name','username', 'password'] must be specified")
+        raise ValidationError("All of ['name','username', 'password','email'] must be specified")

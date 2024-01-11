@@ -27,11 +27,10 @@ class SongUpdateSchema(Schema):
     # Fonction de validation pour s'assurer qu'au moins un champ est spécifié pour la mise à jour
     @validates_schema
     def validates_schema_for_update(self, data, **kwargs):
-        # Vérification qu'au moins un champ est spécifié pour la mise à jour
         fields_to_check = ['artist', 'album', 'title', 'genre']
         for field in fields_to_check:
             if field in data and data[field]:
-                return  # Au moins un champ non vide est trouvé
+                return  
         raise ValidationError("At least one of ['artist', 'album', 'title', 'genre'] must be specified")
 
 
@@ -42,11 +41,11 @@ class SongCreateSchema(Schema):
     title = fields.String(required=True, description="Title")
     genre = fields.String(required=True, description="Genre")
 
-    # Validation pour s'assurer qu'au moins un champ est spécifié
+    # Validation pour s'assurer que tous les champs sont spécifiés
     @validates_schema
     def validate_field(self, data, **kwargs):
         fields_to_check = ['artist', 'album', 'title', 'genre']
         for field in fields_to_check:
             if field in data and data[field]:
-                return  # Au moins un champ non vide est trouvé
+                return 
         raise ValidationError("All of ['artist', 'album', 'title', 'genre'] must be specified")

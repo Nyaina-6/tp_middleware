@@ -13,7 +13,7 @@ import src.services.songs as songs_service
 songs = Blueprint(name="songs", import_name=__name__)
 
 @songs.route('/<id>', methods=['GET'])
-#@login_required
+@login_required
 def get_song(id):
     """
     ---
@@ -54,7 +54,7 @@ def get_song(id):
     return songs_service.get_song(id)
 
 @songs.route('/<id>', methods=['PUT'])
-#@login_required
+@login_required
 def put_song(id):
     """
     ---
@@ -71,7 +71,7 @@ def put_song(id):
         required: true
         content:
             application/json:
-                schema: SongUpdateSchema  # Assurez-vous d'avoir un schéma pour la mise à jour des chansons
+                schema: SongUpdateSchema  
       responses:
         '200':
           description: Ok
@@ -113,12 +113,11 @@ def put_song(id):
     try:
         return songs_service.modify_song(id, song_update)
     except Exception :
-        # Gérer d'autres exceptions en fonction de votre logique
         error = SomethingWentWrongSchema().loads("{}")
         return error, error.get("code")
 
 @songs.route('/', methods=['GET'])
-#login_required
+@login_required
 def get_all_songs():
     """
     ---
@@ -145,7 +144,7 @@ def get_all_songs():
     return songs_service.get_all_songs()
 
 @songs.route('', methods=['POST'])
-#@login_required
+@login_required
 def create_song():
     """
     ---
@@ -208,7 +207,7 @@ def create_song():
       
     
 @songs.route('/<id>', methods=['DELETE'])
-#@login_required
+@login_required
 def delete_song(id):
     """
     ---

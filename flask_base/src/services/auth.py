@@ -1,5 +1,4 @@
 from werkzeug.security import check_password_hash
-from werkzeug.security import generate_password_hash
 
 
 from src.models.http_exceptions import *
@@ -11,7 +10,7 @@ def login(user_login):
     existing_user = users_service.get_user_from_db(user_login.get("username"))
     if  existing_user:
         # on vérifie son mot de passe
-        if not check_password_hash(existing_user.encrypted_password, user_login.get("password")):
+        if check_password_hash(existing_user.encrypted_password, user_login.get("password")):
             raise Unauthorized
     else:
         raise NotFound
